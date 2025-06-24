@@ -1,0 +1,76 @@
+<header [ngClass]="{'sticky': screenWidth > 1000}"
+    style="backface-visibility: visible; background-color: rgba(0, 108, 228, 1);">
+    <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+        <ul class="logo" style="margin-right: auto;" (click)="scrollToSection('Trangchu')">
+            <a routerLink="/" class="logo" style="font-family:'Times New Roman', Times, serif;">Travel Chill</a>
+        </ul>
+
+        <ul class="navbar" style="flex-grow: 1; display: flex; justify-content: center;"
+            *ngIf="screenWidth > 800 || isMenuOpen" [ngClass]="{ 'open': isMenuOpen}">
+            <li><a (click)="scrollToSection('Trangchu')">Trang chủ</a></li>
+            <li><a (click)="scrollToSection('DiemDen')">Các điểm đến</a></li>
+            <li><a (click)="goToAccountReserved()">Tour đã mua</a></li>
+        </ul>
+
+        <ul class="h-right" style="margin-left: auto; position: relative;">
+            <li><a class="nav-btn" (click)="goToAccount()">Tài khoản</a></li>
+            <li class="relative">
+                <a class="nav-btn cursor-pointer" (click)="toggleNotifications()">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 00-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9">
+                        </path>
+                    </svg>
+                    <span *ngIf="unreadCount >= 0"
+                        class="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                        {{ unreadCount }}
+                    </span>
+                </a>
+            </li>
+            <li>
+                <div class="hamburger" (click)="toggleMenu()" *ngIf="screenWidth <= 800">
+                    <span [class.active]="isMenuOpen"></span>
+                    <span [class.active]="isMenuOpen"></span>
+                    <span [class.active]="isMenuOpen"></span>
+                </div>
+            </li>
+        </ul>
+    </div>
+</header>
+<div class="modal" style="margin-top: 40px; max-height: 70vh; overflow-y: auto; z-index: 100;" *ngIf="isNotificationOpen">
+        <div class="tour-container">
+            <h3 class="text-lg font-semibold mb-2">Thông báo</h3>
+            <div *ngIf="notices.length === 0" class="text-gray-500">
+                Không có thông báo mới
+            </div>
+            <div *ngFor="let notice of notices" class="tour-card">
+                <div (click)="goToDetail(notice)">
+                <div class="tour-info">
+                    <p>{{ getNoticeMessage(notice) }}</p>
+                    <span class="text-xs text-gray-400">{{ formatDate(notice.daytimeStart) }}</span>
+                </div>
+                <button *ngIf="notice.status === 0" (click)="markNoticeAsRead(notice.noticeId)"
+                    class="detail-button">
+                    Đánh dấu đã đọc
+                </button>
+                </div>
+            </div>
+            <!-- PHÂN TRANG -->
+            <div class="pagination" *ngIf="totalPages > 1">
+                <button (click)="changeNoticePage(currentNoticePage - 1)" [disabled]="currentNoticePage === 1">←
+                    Trước</button>
+                <span>Trang {{ currentNoticePage }} / {{ totalPages }}</span>
+                <button (click)="changeNoticePage(currentNoticePage + 1)"
+                    [disabled]="currentNoticePage === totalPages">Sau →</button>
+            </div>
+            <!--div class="flex justify-between mt-4" *ngIf="totalPages > 1">
+                    <button (click)="changeNoticePage(currentNoticePage - 1)" [disabled]="currentNoticePage === 1"
+                        class="px-2 py-1 bg-gray-200 rounded disabled:opacity-50">Trước</button>
+                    <span>Trang {{ currentNoticePage }} / {{ totalPages }}</span>
+                    <button (click)="changeNoticePage(currentNoticePage + 1)"
+                        [disabled]="currentNoticePage === totalPages"
+                        class="px-2 py-1 bg-gray-200 rounded disabled:opacity-50">Sau</button>
+                </div-->
+        </div>
+    </div>

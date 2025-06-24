@@ -1,0 +1,113 @@
+<app-header></app-header>
+
+<!-- Trangchu section start -->
+<section class="home" id="Trangchu">
+  <div class="left-side">
+    <div class="home-text" id="home-text">
+      <h1>Khám phá</h1>
+      <h6>Và trải nghiệm <br> Các điểm đến thú vị</h6>
+      <br />
+      <em>Lên kế hoạch và đặt lịch ngay hôm nay<br /></em>
+      <a (click)="goToTourList('')" class="btn">Đặt lịch</a>
+    </div>
+  </div>
+  <div class="right-side">
+    <div class="slider">
+      <img src="assets/Image/du-lich-bien-mien-bac-thumb-1.jpg" alt="Ảnh 1" />
+      <img src="assets/Image/PhuQuoc.jpg" alt="Ảnh 2" />
+      <img src="assets/Image/BieutuongPhuQuoc.jpg" alt="Ảnh 3" />
+    </div>
+  </div>
+</section>
+
+<!-- Khám phá categories section start -->
+<section class="categories" id="Khampha">
+  <div class="home-text">
+    <h1>Các Tour nổi bật</h1>
+    <p>Tìm hiểu thêm nhiều địa danh và hành trình.</p>
+  </div>
+  <a class="nav-btn" style="align-items: end; color: black; border-color: black;" (click)="goToTourList('')">
+    Xem tất cả các tour >>
+  </a>
+
+  <div class="categories-content" *ngIf="tours && tours.length >= 3">
+    <ng-container *ngFor="let tour of [0, 1, 2]">
+      <a class="item" (click)="goToDetail(tours.at(tour)?.tourId, tours.at(tour)?.daytimeStart)">
+        <div class="row-img">
+          <img [src]="tours.at(tour)?.linkImage" />
+        </div>
+        <h3>{{ tours.at(tour)?.tourName }}</h3>
+        <p>Mã Tour: <strong style="color: red;">{{ tours.at(tour)?.tourId }}</strong></p>
+        <p>Điểm khởi hành: {{ tours.at(tour)?.startDestination }}</p>
+        <p>Điểm đến: {{ tours.at(tour)?.thoughoutDestination?.slice(0, 3)?.join(', ') }}</p>
+        <p>Thời gian: <strong>{{ tours.at(tour)?.dayNumber }}N{{ tours.at(tour)?.nightNumber }}Đ</strong></p>
+        <p>Ngày khởi hành: <strong>{{ tours.at(tour)?.daytimeStart | date: 'dd/MM/yyyy' }}</strong></p>
+        <p>Số chỗ còn: {{ tours.at(tour)?.slotRemain }} chỗ</p>
+        <p>Gía vé: <strong style="color: red;">{{ tours.at(tour)?.price | number:'1.0-0'}}</strong> VNĐ/khách</p>
+      </a>
+    </ng-container>
+  </div>
+</section>
+
+<!-- Destination section start -->
+<section class="destination" id="DiemDen">
+  <h1 class="destination-title">Các điểm đến hấp dẫn</h1>
+  <section class="destination_section" *ngIf="allDestinations && allDestinations.length >= 7">
+    <div class="grid-container">
+      <div class="grid-container-col-bigger-lv1">
+        <div class="grid-container-col-bigger-lv1-rowelement">
+          <div class="grid-container-col-bigger-lv2">
+            <div class="grid-item" (click)="goToTourList(allDestinations[0])">
+              <img src="assets/Image/BieutuongHalong.jpg" alt="Hạ Long" />
+              <div class="overlay">{{ allDestinations[0] }}</div>
+            </div>
+          </div>
+          <div class="grid-container-col-lv2">
+            <div class="grid-container-col-lv2-rowelement">
+              <div class="grid-item" (click)="goToTourList(allDestinations[1])">
+                <img src="assets/Image/BieutuongDanang.jpg" alt="Đà Nẵng" />
+                <div class="overlay">{{ allDestinations[1] }}</div>
+              </div>
+            </div>
+            <div class="grid-container-col-lv2-rowelement">
+              <div class="grid-item" (click)="goToTourList(allDestinations[2])">
+                <img src="assets/Image/BieutuongHoian.jpg" alt="Hội An" />
+                <div class="overlay">{{ allDestinations[2] }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="grid-container-col-bigger-lv1-rowelement">
+          <div class="grid-container-col-lv2">
+            <div class="grid-container-col-lv2-rowelement">
+              <div class="grid-item" (click)="goToTourList(allDestinations[3])">
+                <img src="assets/Image/BieutuongDaLat.jpg" alt="Đà Lạt" />
+                <div class="overlay">{{ allDestinations[3] }}</div>
+              </div>
+            </div>
+            <div class="grid-container-col-lv2-rowelement">
+              <div class="grid-item" (click)="goToTourList(allDestinations[4])">
+                <img src="assets/Image/BieutuongPhuQuoc.jpg" alt="Phú Quốc" />
+                <div class="overlay">{{ allDestinations[4] }}</div>
+              </div>
+            </div>
+          </div>
+          <div class="grid-container-col-bigger-lv2">
+            <div class="grid-item" (click)="goToTourList(allDestinations[5])">
+              <img src="assets/Image/BieutuongHCM.jpg" alt="Hồ Chí Minh" />
+              <div class="overlay">{{ allDestinations[5] }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="grid-container-col-lv1">
+        <div class="grid-item" (click)="goToTourList(allDestinations[6])">
+          <img src="assets/Image/BieutuongHanoi.jpg" alt="Hà Nội" />
+          <div class="overlay">{{ allDestinations[6] }}</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</section>
+
+<app-footer></app-footer>

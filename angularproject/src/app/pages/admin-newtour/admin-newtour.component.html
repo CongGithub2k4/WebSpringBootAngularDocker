@@ -1,0 +1,131 @@
+<app-admin-header></app-admin-header>
+<section class="page">
+    <div class="addtour-section">
+        <div class="title">Thêm Tour du lịch mới</div>
+
+        <div class="form-group">
+            <label>Tên Tour:</label>
+            <input type="text" [(ngModel)]="tour.tourName" placeholder="Điền tên Tour" />
+            <p *ngIf="formSubmitted && (!tour.tourName || tour.tourName.trim() === '')" style="color:red;">
+                Tên tour không được để trống
+            </p>
+        </div>
+
+        <div class="form-group">
+            <label>Mã Tour:</label>
+            <input type="text" placeholder="Tự động tạo" disabled />
+        </div>
+
+        <!--div class="form-group">
+            <label>Mô tả:</label>
+            <input type="text" [(ngModel)]="tour.description" placeholder="Mô tả tour" />
+        </div-->
+
+        <!-- Điểm khởi hành -->
+        <!--div class="form-group">
+            <label>Điểm khởi hành:</label>
+            <select [(ngModel)]="tour.startDestination" class="styled-select">
+                <option *ngFor="let location of startList" [value]="location">{{ location }}</option>
+            </select>
+            <p *ngIf="formSubmitted && !tour.startDestination" style="color:red;">
+                Vui lòng chọn điểm khởi hành
+            </p>
+        </div-->
+        <div class="form-group">
+            <label>Điểm khởi hành:</label>
+            <select [(ngModel)]="tour.startDestination" class="styled-select" (change)="onStartDestinationChange()">
+                <option value="">Chọn điểm khởi hành</option>
+                <option *ngFor="let location of startList" [value]="location">{{ location }}</option>
+            </select>
+            <p *ngIf="formSubmitted && !tour.startDestination" style="color:red;">
+                Vui lòng chọn điểm khởi hành
+            </p>
+        </div>
+
+
+        <!-- Các điểm đến -->
+        <div class="form-group">
+            <label>Các điểm đến (nhiều lựa chọn):</label>
+            <div class="multiselect">
+                <div class="selected-box" (click)="toggleDropdown()">
+                    {{ getDisplayDestinations() }}
+                </div>
+                <div class="dropdown-list" *ngIf="dropdownOpen">
+                    <div class="dropdown-item" *ngFor="let location of locationList">
+                        <label [for]="location" class="dropdown-item-label">{{ location }}</label>
+                        <input type="checkbox" [id]="location" [checked]="tour.thoughoutDestination.includes(location)"
+                            (change)="onDestinationToggle(location)" />
+                    </div>
+                </div>
+                <p *ngIf="formSubmitted && (!tour.thoughoutDestination || tour.thoughoutDestination.length === 0)"
+                    style="color:red;">
+                    Vui lòng chọn ít nhất một điểm đến
+                </p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Ngày khởi hành:</label>
+            <input type="date" [(ngModel)]="tour.daytimeStart" (change)="checkAfterToday()"/>
+            <p *ngIf="!validDayStart" style="color:red;">
+                Ngày khởi hành phải lớn hơn hôm nay
+            </p>
+            <p *ngIf="formSubmitted && (! tour.daytimeStart) && (!validDayStart)" style="color:red;">
+                Chưa chọn ngày khởi hành
+            </p>
+        </div>
+
+        <div class="form-group">
+            <label>Giá:</label>
+            <input type="number" [(ngModel)]="tour.price" />
+            <p *ngIf="formSubmitted && (!tour.price || tour.price <= 0)" style="color:red;">
+                Giá phải lớn hơn 0
+            </p>
+        </div>
+
+        <div class="form-group">
+            <label>Số ngày:</label>
+            <input type="number" [(ngModel)]="tour.dayNumber" />
+            <p *ngIf="formSubmitted && (!tour.dayNumber || tour.dayNumber <= 0)" style="color:red;">
+                số ngày phải lớn hơn 0
+            </p>
+        </div>
+
+        <div class="form-group">
+            <label>Số đêm:</label>
+            <input type="number" [(ngModel)]="tour.nightNumber" />
+            <p *ngIf="formSubmitted && (!tour.nightNumber || tour.nightNumber <= 0)" style="color:red;">
+                Số đêm không được nhỏ hơn 0
+            </p>
+        </div>
+
+        <div class="form-group">
+            <label>Tổng số chỗ:</label>
+            <input type="number" [(ngModel)]="tour.totalSlot" />
+            <p *ngIf="formSubmitted && (!tour.totalSlot || tour.totalSlot <= 0)" style="color:red;">
+                Số chỗ lớn hơn 0
+            </p>
+        </div>
+
+        <button class="detail-button" style="align-self: end;" (click)="submitTour()">Cập nhật</button>
+        <!-- Thêm một thông báo nhắc nhở người dùng -->
+        <p *ngIf="selectedFile==null" style="color: red;">Vui lòng tải lên ảnh trước khi tạo tour!</p>
+    </div>
+
+    <div class="load-image">
+        <h1>Thêm Ảnh mô tả</h1>
+
+        <!--div class="form-group">
+            <label>Link ảnh (trên mạng):</label>
+            <input type="text" [(ngModel)]="imageLink" placeholder="" />
+            <button class="detail-button" (click)="uploadImageLink()">Gửi link ảnh</button>
+        </div-->
+
+        <div class="form-group">
+            <label>Chọn ảnh từ máy:</label>
+            <input type="file" (change)="onFileSelected($event)" accept="image/*" />
+            <img [src]="previewUrl" style="max-width: 300px;" *ngIf="previewUrl" />
+            <!--button class="detail-button" (click)="uploadImageFile()">Tải lên</button-->
+        </div>
+    </div>
+</section>

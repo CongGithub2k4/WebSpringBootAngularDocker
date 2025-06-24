@@ -1,0 +1,64 @@
+# travelchill/Dockerfile-springboot
+
+# ==============================================================================
+# STAGE 1: BUILD SPRING BOOT APPLICATION
+# Mục tiêu: Biên dịch ứng dụng Spring Boot thành một file JAR.
+# Sử dụng một image Maven/JDK đầy đủ để thực hiện quá trình build.
+# ==============================================================================
+FROM maven:latest AS maven-builder
+# Ghi chú: maven:latest thường được cập nhật để hỗ trợ các phiên bản JDK mới nhất.
+# Nếu bạn muốn chỉ định cụ thể Maven với JDK 26 (nếu có tag), bạn có thể thử:
+# FROM maven:3.x.x-openjdk-26 AS maven-builder (thay 3.x.x bằng phiên bản Maven cụ thể)
+# Hoặc nếu bạn sử dụng Gradle, hãy thay thế dòng trên bằng:
+# FROM gradle:8.x-jdk21 AS gradle-builder (thay 8.x bằng phiên bản Gradle cụ thể và kiểm tra tag JDK 26)
+
+# Đặt thư mục làm việc bên trong container của giai đoạn build.
+WORKDIR /app
+
+# Copy các tệp cấu hình Maven (pom.xml) để tận dụng Docker cache.
+# Nếu pom.xml không thay đổi, Docker sẽ sử dụng lại lớp này, giúp build nhanh hơn.
+# '.' ở đây là build context (travelchill/), nên nó sẽ copy pom.xml từ đó.
+COPY pom.xml ./
+
+# Copy mã nguồn của ứng dụng từ thư mục 'src' của host vào container.
+# Lưu ý: 'src' được đặt ở gốc của build context (travelchill/).
+COPY src ./src/
+
+# Chạy lệnh build ứng dụng Spring Boot.
+# 'clean package' sẽ dọn dẹp và đóng gói ứng dụng thành một file JAR.
+# '-DskipTests' bỏ qua các bài kiểm tra unit/integration để tăng tốc độ build Docker.
+RUN mvn clean package -DskipTests
+# Ghi chú: Nếu bạn sử dụng Gradle, hãy thay thế dòng trên bằng:
+# RUN gradle clean build -x test
+
+# ==============================================================================
+# STAGE 2: RUN SPRING BOOT APPLICATION
+# Mục tiêu: Tạo một image nhỏ gọn chỉ chứa JRE và ứng dụng đã build để chạy.
+# Sử dụng một image JRE tối thiểu để giảm đáng kể kích thước ảnh cuối cùng.
+# ==============================================================================
+FROM openjdk:21-slim
+# Đây là tag JRE 26 chính thức cho bản slim (như bạn đã thấy trong Docker Desktop UI)
+# Hoặc nếu bạn muốn phiên bản JDK đầy đủ để chạy (kích thước lớn hơn):
+# FROM openjdk:26-jdk-slim
+# Ghi chú: Để có image nhỏ hơn nữa, bạn có thể thử:
+# FROM openjdk:26-jre-alpine (nếu có và phù hợp với ứng dụng của bạn)
+
+# Đặt các biến môi trường cho JVM để tối ưu hóa bộ nhớ và hiệu suất trong container.
+# -XX:MaxRAMPercentage=75.0: Đặt giới hạn tối đa 75% RAM của container cho JVM heap.
+# -Djava.security.egd=file:/dev/./urandom: Tăng tốc độ khởi động của ứng dụng Java trên Linux.
+ENV JAVA_TOOL_OPTIONS="-XX:MaxRAMPercentage=75.0 -Djava.security.egd=file:/dev/./urandom"
+
+# Đặt thư mục làm việc trong giai đoạn chạy.
+WORKDIR /app
+
+# Copy file JAR đã build từ giai đoạn 'maven-builder' sang giai đoạn này.
+# LƯU Ý QUAN TRỌNG: Thay thế 'travelchill-0.0.1-SNAPSHOT.jar' bằng TÊN FILE JAR THỰC TẾ
+# của ứng dụng Spring Boot của bạn (artifactId-version.jar, tìm trong pom.xml).
+COPY --from=maven-builder /app/target/travelchill-0.0.1-SNAPSHOT.jar ./app.jar
+
+# Mở cổng mà ứng dụng Spring Boot lắng nghe (mặc định là 8080).
+EXPOSE 8080
+
+# Lệnh để chạy ứng dụng Spring Boot khi container khởi động.
+# Nó sẽ thực thi file JAR đã được copy vào /app/app.jar.
+ENTRYPOINT ["java", "-jar", "app.jar"]

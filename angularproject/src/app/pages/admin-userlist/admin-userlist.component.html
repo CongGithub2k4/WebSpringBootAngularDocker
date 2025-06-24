@@ -1,0 +1,51 @@
+<app-admin-header></app-admin-header>
+<section class="discover">
+  <div class="filter-container">
+    <div class="filter-group">
+      <label class="filter-label">Tìm theo mã Khách hàng</label>
+      <input type="text" placeholder="Tìm theo mã userID" [(ngModel)]="userId" (ngModelChange)="onUserIdChange($event)" />
+    </div>
+    <div class="filter-group">
+      <label class="filter-label">Tìm theo SĐT</label>
+      <input type="text" placeholder="Tìm theo số điện thoại" [(ngModel)]="userPhone"
+        (ngModelChange)="onPhoneChange($event)" />
+    </div>
+    <div class="filter-group">
+      <label class="filter-label">Tìm theo Email</label>
+      <input type="text" placeholder="Tìm theo email" [(ngModel)]="email" (ngModelChange)="onEmailChange($event)" />
+    </div>
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+
+  <div class="tour-container">
+    <div class="filter-group">
+      <label class="filter-label">Chọn loại thống kê</label>
+      <select class="filter-select" [(ngModel)]="selectedType" (change)="onTypeChange()">
+        <option *ngFor="let type of typeList; index as i" [value]="i + 1">
+          {{ type }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Hiển thị dòng mô tả hiện tại -->
+    <!--div class="selected-type">
+      Đang chọn: {{ typeList[selectedType - 1] }}
+      Số trang: {{totalPages}}
+      Trang hiện tại {{currentPage}}
+    </div-->
+
+
+    <div *ngFor="let user of filteredUsers">
+      <app-admin-side-user-card [user]="user"></app-admin-side-user-card>
+    </div>
+
+    <div class="pagination" *ngIf="totalPages >= 0">
+      <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">← Trước</button>
+      <span>Trang {{ currentPage }} / {{ totalPages }}</span>
+      <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Sau →</button>
+    </div>
+  </div>
+</section>

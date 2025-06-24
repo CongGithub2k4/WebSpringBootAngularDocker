@@ -1,0 +1,151 @@
+<app-admin-header></app-admin-header>
+<section class="discover">
+    <!-- TAB HEADER -->
+    <div class="filter-container">
+        <a class="filter-category" [ngClass]="{ active: currentTab === 'reserved' }" (click)="switchTab('reserved')">Hóa
+            đơn khách đã đặt</a>
+        <a class="filter-category" [ngClass]="{ active: currentTab === 'moved' }" (click)="switchTab('moved')">Hóa
+            đơn của Tour đã hoàn thành</a>
+        <a class="filter-category" [ngClass]="{ active: currentTab === 'canceled' }" (click)="switchTab('canceled')">Hóa
+            đơn Khách đã hủy</a>    
+        <a class="filter-category" [ngClass]="{ active: currentTab === 'admincanceled' }"
+            (click)="switchTab('admincanceled')">Tour hủy đột xuất bởi Hãng</a>
+    </div>
+
+    <!-- TAB: BOOKING -->
+    <div *ngIf=" currentTab==='reserved' " class="tour-container">
+        <div *ngIf="errorMessage" class="alert alert-danger">
+            {{ errorMessage }}
+        </div>
+        <div class="tour-card">
+            <!-- Dropdown chọn mã Tour -->
+            <div class="filter-group">
+                <label class="filter-label">Chọn Mã Tour</label>
+                <select class="filter-select" [(ngModel)]="selectedTourId" (change)="onTourIdChange()">
+                    <option value="">Tất cả</option>
+                    <option *ngFor="let id of tourIds" [value]="id">{{ id }}</option>
+                </select>
+            </div>
+
+            <!-- Nhập SĐT khách hàng -->
+            <div class="filter-group">
+                <label class="filter-label">Nhập SĐT khách</label>
+                <input type="text" placeholder="Tìm theo SĐT" [(ngModel)]="phoneNumber" (input)="filterBookings()" />
+            </div>
+        </div>
+        <!--div class="tour-container"-->
+            <div *ngFor="let booking of filteredBookings">
+                <app-admin-side-tour-card-bill [booking]="booking"></app-admin-side-tour-card-bill>
+            </div>
+        <!--/div-->
+
+        <!-- PHÂN TRANG -->
+        <div class="pagination" *ngIf="totalPages > 1">
+            <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">← Trước</button>
+            <span>Trang {{ currentPage }} / {{ totalPages }}</span>
+            <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Sau →</button>
+        </div>
+    </div>
+
+    <div *ngIf=" currentTab==='moved' " class="tour-container">
+        <div *ngIf="errorMessage" class="tour-card">
+            {{ errorMessage }}
+        </div>
+        <div class="tour-card">
+            <!-- Dropdown chọn mã Tour -->
+            <div class="filter-group">
+                <label class="filter-label">Chọn Mã Tour</label>
+                <select class="filter-select" [(ngModel)]="selectedTourId" (change)="onTourIdChange()">
+                    <option value="">Tất cả</option>
+                    <option *ngFor="let id of tourIds" [value]="id">{{ id }}</option>
+                </select>
+            </div>
+
+            <!-- Nhập SĐT khách hàng -->
+            <div class="filter-group">
+                <label class="filter-label">Nhập SĐT khách</label>
+                <input type="text" placeholder="Tìm theo SĐT" [(ngModel)]="phoneNumber" (input)="filterBookings()" />
+            </div>
+        </div>
+        <!--div class="tour-container"-->
+            <div *ngFor="let booking of filteredBookings">
+                <app-admin-side-tour-card-bill [booking]="booking"></app-admin-side-tour-card-bill>
+            </div>
+        <!--/div-->
+
+        <!-- PHÂN TRANG -->
+        <div class="pagination" *ngIf="totalPages > 1">
+            <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">← Trước</button>
+            <span>Trang {{ currentPage }} / {{ totalPages }}</span>
+            <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Sau →</button>
+        </div>
+    </div>
+
+    <div *ngIf=" currentTab==='canceled' " class="tour-container">
+        <div *ngIf="errorMessage" class="alert alert-danger">
+            {{ errorMessage }}
+        </div>
+        <div class="tour-card">
+            <!-- Dropdown chọn mã Tour -->
+            <div class="filter-group">
+                <label class="filter-label">Chọn Mã Tour</label>
+                <select class="filter-select" [(ngModel)]="selectedTourId" (change)="onTourIdChange()">
+                    <option value="">Tất cả</option>
+                    <option *ngFor="let id of tourIds" [value]="id">{{ id }}</option>
+                </select>
+            </div>
+
+            <!-- Nhập SĐT khách hàng -->
+            <div class="filter-group">
+                <label class="filter-label">Nhập SĐT khách</label>
+                <input type="text" placeholder="Tìm theo SĐT" [(ngModel)]="phoneNumber" (input)="filterBookings()" />
+            </div>
+        </div>
+        <!--div class="tour-container"-->
+            <div *ngFor="let booking of filteredBookings">
+                <app-admin-side-tour-card-bill [booking]="booking"></app-admin-side-tour-card-bill>
+            </div>
+        <!--/div-->
+
+        <!-- PHÂN TRANG -->
+        <div class="pagination" *ngIf="totalPages > 1">
+            <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">← Trước</button>
+            <span>Trang {{ currentPage }} / {{ totalPages }}</span>
+            <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Sau →</button>
+        </div>
+    </div>
+
+    <div *ngIf=" currentTab==='admincanceled' " class="tour-container">
+        <div *ngIf="errorMessage" class="alert alert-danger">
+            {{ errorMessage }}
+        </div>
+        <div class="tour-card">
+            <!-- Dropdown chọn mã Tour -->
+            <div class="filter-group">
+                <label class="filter-label">Chọn Mã Tour</label>
+                <select class="filter-select" [(ngModel)]="selectedTourId" (change)="onTourIdChange()">
+                    <option value="">Tất cả</option>
+                    <option *ngFor="let id of tourIds" [value]="id">{{ id }}</option>
+                </select>
+            </div>
+
+            <!-- Nhập SĐT khách hàng -->
+            <div class="filter-group">
+                <label class="filter-label">Nhập SĐT khách</label>
+                <input type="text" placeholder="Tìm theo SĐT" [(ngModel)]="phoneNumber" (input)="filterBookings()" />
+            </div>
+        </div>
+        <!--div class="tour-container"-->
+            <div *ngFor="let booking of filteredBookings">
+                <app-admin-side-tour-card-bill [booking]="booking"></app-admin-side-tour-card-bill>
+            </div>
+        <!--/div-->
+
+        <!-- PHÂN TRANG -->
+        <div class="pagination" *ngIf="totalPages > 1">
+            <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">← Trước</button>
+            <span>Trang {{ currentPage }} / {{ totalPages }}</span>
+            <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Sau →</button>
+        </div>
+    </div>
+</section>

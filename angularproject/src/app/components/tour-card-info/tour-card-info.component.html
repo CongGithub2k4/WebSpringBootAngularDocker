@@ -1,0 +1,15 @@
+<div class="tour-card">
+  <img src="{{tour?.linkImage}}" width="250px" height="200px">
+  <div class="tour-info">
+    <p>Đã có:<strong style="color: red;"> {{ (tour?.totalSlot ?? 0) - (tour?.slotRemain ?? 0) }} vé được bán </strong></p>
+    <h3>{{ tour?.tourName }}</h3>
+    <p>Mã Tour: <strong style="color: red;">{{ tour?.tourId }}</strong></p>
+    <p>Điểm khởi hành: {{ tour?.startDestination }}</p>
+    <p>Điểm đến: {{ tour?.thoughoutDestination?.slice(0, 3)?.join(', ') }}</p>
+    <p>Thời gian: <strong>{{ tour?.dayNumber }}N{{ tour?.nightNumber }}Đ</strong></p>
+    <p>Ngày khởi hành: <strong>{{ tour?.daytimeStart | date: 'dd/MM/yyyy' }}</strong></p>
+    <p>Số chỗ còn: {{ tour?.slotRemain }} chỗ</p>
+    <p>Gía vé: <strong style="color: red;">{{ tour?.price | number:'1.0-0'}}</strong> VNĐ/khách</p>
+    <a class="detail-button" (click)="goToDetail()">Xem Chi Tiết</a>
+  </div>
+</div>

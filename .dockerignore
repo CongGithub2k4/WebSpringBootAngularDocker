@@ -1,0 +1,78 @@
+# travelchill/.dockerignore
+
+# Các tệp và thư mục bị bỏ qua bởi Docker trong quá trình build context.
+# Việc này giúp giảm kích thước build context, tăng tốc độ build
+# và tạo ra các image nhỏ gọn hơn cho Spring Boot.
+
+# -------------------------------------------------------------
+# Thư mục và tệp đầu ra của quá trình build
+# -------------------------------------------------------------
+# Thư mục đích của Maven (chứa JAR đã build, class files, v.v.).
+# Không cần copy từ host vì nó sẽ được build trong container.
+target/
+
+# Thư mục build của Gradle (nếu bạn dùng Gradle).
+build/
+
+# -------------------------------------------------------------
+# Thư mục liên quan đến Hệ thống kiểm soát phiên bản (Git)
+# -------------------------------------------------------------
+.git/
+.gitignore
+.gitattributes
+
+# -------------------------------------------------------------
+# Thư mục và tệp cấu hình IDE (IntelliJ IDEA, Eclipse, v.v.)
+# -------------------------------------------------------------
+.idea/
+.mvn/
+# Thư mục Maven Wrapper. Bỏ qua vì chúng ta dùng Maven trong Docker image.
+.project
+# Tệp dự án Eclipse
+.classpath
+# Tệp classpath của Eclipse
+.settings/
+# Thư mục cài đặt của Eclipse
+.STS4/
+# Thư mục cài đặt của Spring Tool Suite 4
+
+# Cấu hình Visual Studio Code
+.vscode/
+
+# -------------------------------------------------------------
+# Các tệp tạm thời hoặc không cần thiết khác
+# -------------------------------------------------------------
+*.log
+*.tmp
+*.bak
+*.swp
+temp/
+out/
+# Thư mục output của một số IDE
+
+# Các tệp wrapper script của Maven/Gradle (chúng ta không dùng chúng từ host trong Docker)
+mvnw
+mvnw.cmd
+gradlew
+gradlew.bat
+
+# Nếu bạn không muốn copy các tệp tài liệu hướng dẫn
+HELP.md
+
+# Bỏ qua các Dockerfile khác và docker-compose.yml trong ngữ cảnh build của ảnh này
+# (Trừ Dockerfile-springboot mà chúng ta đang dùng để build ảnh này).
+# Tuy nhiên, nếu bạn đã đặt Dockerfile-springboot ở root và context là '.',
+# thì nó sẽ tự động được đưa vào, không cần thêm vào đây.
+# Dockerfile
+# docker-compose.yml
+
+# Bỏ qua toàn bộ thư mục Angular khi build image Spring Boot,
+# vì nó không liên quan đến backend.
+angularproject/
+
+# Bỏ qua thư mục db-init vì nó chỉ liên quan đến DB, không phải ứng dụng Spring Boot.
+db-init/
+
+# Bỏ qua thư mục uploads cục bộ khi build image Spring Boot.
+# Thư mục này sẽ được mount từ host vào container khi chạy.
+uploads/

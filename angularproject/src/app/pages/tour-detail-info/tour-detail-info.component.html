@@ -1,0 +1,85 @@
+<app-header></app-header>
+<!-- Trạng thái đang tải -->
+<div *ngIf="loading" class="loading-message" style="margin-top: 100px;">
+    Đang tải dữ liệu, vui lòng chờ...
+</div>
+
+<!-- Trạng thái lỗi -->
+<div *ngIf="errorMessage" class="error-message" style="margin-top: 100px;">
+    ⚠️ {{ errorMessage }}
+</div>
+
+<!-- Nội dung chính khi có dữ liệu và tour -->
+<div *ngIf="!loading && !errorMessage && tour" class="tour-detail-content">
+    <div class="image-booking">
+        <div class="grid-item" style="box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.3);">
+            <img [src]="tour.linkImage" alt="Hình ảnh tour" />
+        </div>
+    </div>
+
+    <div class="tour-info">
+        <h3>{{ tour.tourName }}</h3>
+        <p>Mã tour: {{ tour.tourId }}</p>
+        <p>Điểm khởi hành: {{ tour.startDestination }}</p>
+        <p>Các điểm đến: </p>
+        <ul>
+            <li
+                *ngFor="let point of (showAllDestinations ? tour.thoughoutDestination : tour.thoughoutDestination.slice(0, 3))">
+                {{ point }}
+            </li>
+        </ul>
+
+        <button *ngIf="tour.thoughoutDestination.length > 3" (click)="toggleShowAllDestinations()">
+            {{ showAllDestinations ? 'Thu gọn' : 'Xem thêm' }}
+        </button>
+        <p>Giá: <strong style="color: red;">{{ tour.price | number:'1.0-0' }} đ</strong> / Khách</p>
+        <p>Ngày khởi hành: <span style="color: red;">{{ daytimeStartDate | date :'dd/MM/yyyy' }}</span></p>
+        <p>Thời gian: {{ tour.dayNumber }}N{{ tour.nightNumber }}Đ</p>
+        <p>Số chỗ còn: <span style="color: red;">{{ remainingSeats }}</span></p>
+
+        <!-- Nút Đặt lịch -->
+        <button class="detail-button" (click)="openConfirmModal()">Đặt lịch</button>
+
+        <!-- Debug để kiểm tra showConfirmModal -->
+        <!--div *ngIf="showConfirmModal"
+            style="position: fixed; top: 10px; right: 10px; background: red; color: white; padding: 10px; z-index: 1001;">
+            Debug: showConfirmModal is true
+        </div-->
+        <!-- Modal chọn số lượng -->
+        <div class="modal" *ngIf="showConfirmModal">
+            <div class="modal-content">
+                <p>Bạn có chắc chắn muốn đặt tour không?</p>
+                <label for="seatCount">Số chỗ cần đặt:</label>
+                <input type="number" id="seatCount" [(ngModel)]="seatCount" min="1" [max]="remainingSeats"
+                    style="width: 60px;" />
+                <p *ngIf="!validateSeats()" style="color: red;">Số chỗ không hợp lệ!</p>
+                <br />
+                <div style="display: flex; justify-content: space-between;">
+                    <button class="detail-button" (click)="proceedBooking()">Xác nhận mua</button>
+                    <button class="detail-button" style="background-color: red;" (click)="closeConfirmModal()">Hủy</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal thanh toán -->
+        <div class="modal" *ngIf="showPaymentModal">
+            <div class="modal-content">
+                <h3>Thông tin thanh toán</h3>
+                <p>Chuyển khoản đến tài khoản:</p>
+                <p><strong>Ngân hàng: Vietcombank</strong></p>
+                <p><strong>Số tài khoản: 0123456789</strong></p>
+                <p><strong>Chủ tài khoản: Nguyễn Văn A</strong></p>
+                <p>Nội dung chuyển khoản: <strong>Mã Tour: {{ tour.tourId }} - {{ userName }}</strong></p>
+
+                <p>Hoặc quét mã QR để thanh toán:</p>
+                <img src="assets/Image/qr-code.png" alt="Mã QR thanh toán" width="200px" />
+
+                <br /><br />
+                <div style="display: flex; justify-content: space-between;">
+                    <button class="detail-button" (click)="confirmPayment()">Hoàn tất thanh toán</button>
+                    <button class="detail-button" style="background-color: red;" (click)="closeConfirmPayment()">Hủy</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

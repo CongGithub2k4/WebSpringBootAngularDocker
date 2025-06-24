@@ -1,0 +1,71 @@
+<app-header></app-header>
+<section class="login-section">
+    <div class="container">
+        <div class="tab">
+            <button [class.active]="isLoginMode" (click)="switchToLogin()">Đăng nhập</button>
+            <button [class.active]="!isLoginMode" (click)="switchToRegister()">Đăng ký</button>
+        </div>
+
+        <!-- Đăng nhập -->
+        <div *ngIf="isLoginMode" class="form-container">
+            <h2>Đăng nhập</h2>
+            <br><br><br>
+            <form (ngSubmit)="onLogin()" #loginForm="ngForm">
+                <input type="text" placeholder="SĐT hoặc email" [(ngModel)]="loginData.emailOrSDT"
+                    name="usernameOrEmail" required #usernameOrEmail="ngModel">
+                <input type="password" placeholder="Mật khẩu" [(ngModel)]="loginData.password" name="password" required
+                    #password="ngModel">
+                <br>
+                <a href="javascript:void(0)" (click)="openForgotPasswordModal()">Quên mật khẩu?</a>
+                <br><br>
+                <button type="submit" class="submit" [disabled]="!loginForm.form.valid">Đăng nhập</button>
+                <!--button class="submit">Admin</button-->
+            </form>
+        </div>
+
+        <!-- Đăng ký -->
+        <div *ngIf="!isLoginMode" class="form-container">
+            <h2>Đăng ký</h2>
+            <form (ngSubmit)="onRegister()" #registerForm="ngForm">
+                <input type="text" placeholder="Tên người dùng" [(ngModel)]="registerData.userName" name="username"
+                    required #username="ngModel">
+                <input type="text" placeholder="Số điện thoại" [(ngModel)]="registerData.phoneNumber" name="phone" required
+                    #phone="ngModel">
+                <input type="email" placeholder="Email" [(ngModel)]="registerData.email" name="email" required
+                    #email="ngModel">
+                <input type="password" placeholder="Mật khẩu" [(ngModel)]="registerData.userPassword" name="password"
+                    required #passwordRegister="ngModel">
+                <input type="password" placeholder="Nhập lại mật khẩu" [(ngModel)]="registerData.confirmPassword"
+                    name="confirmPassword" required #confirmPassword="ngModel">
+
+                <!-- Error message for password mismatch -->
+                <div *ngIf="registerData.userPassword !== registerData.confirmPassword && registerData.confirmPassword"
+                    style="color: red;">
+                    Mật khẩu và Nhập lại mật khẩu không khớp!
+                </div>
+
+                <br><br><br>
+                <button type="submit" class="submit"
+                    [disabled]="!registerForm.form.valid || registerData.userPassword !== registerData.confirmPassword">Đăng
+                    ký</button>
+            </form>
+        </div>
+
+        <!-- Forgot Password Modal -->
+        <div *ngIf="showForgotPasswordModal" class="modal">
+            <div class="modal-content">
+                <h2>Quên mật khẩu</h2>
+                <form (ngSubmit)="onForgotPassword()" #forgotPasswordForm="ngForm">
+                    <input type="text" placeholder="SĐT hoặc Email" [(ngModel)]="forgotPasswordData.emailOrSDT"
+                        name="emailOrSDT" required #emailOrSDT="ngModel">
+                    <div *ngIf="forgotPasswordError" style="color: red;">
+                        {{ forgotPasswordError }}
+                    </div>
+                    <br>
+                    <button type="submit" class="submit" [disabled]="!forgotPasswordForm.form.valid">Gửi yêu cầu</button>
+                    <button type="button" class="cancel" (click)="closeForgotPasswordModal()">Hủy</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

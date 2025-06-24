@@ -1,0 +1,14 @@
+<div class="tour-card">
+    <div class="tour-info">
+        <p><strong style="color: red;">Tổng số hóa đơn đã mua</strong>: {{ user?.bookingCount}}</p>
+        <p><strong style="color: red;">Tổng số tiền đã chi</strong>: {{ user?.totalSpent |  number:'1.0-0' }} VNĐ</p>
+    </div>
+    <div class="tour-info">
+        <h3>Tên người dùng: {{ user?.userName }}</h3> 
+        <p>Mã người dùng: <strong style="color: red;">{{ user?.userId}}</strong></p>
+        <p>Email: {{ user?.email }}</p>
+        <p>Số điện thoại: {{ user?.phoneNumber }}</p>
+        <!--p>Mật khẩu: {{ user.userPassword }}</p-->
+        <p>Địa chỉ: {{ user?.userAddress }}</p>
+    </div>
+</div>

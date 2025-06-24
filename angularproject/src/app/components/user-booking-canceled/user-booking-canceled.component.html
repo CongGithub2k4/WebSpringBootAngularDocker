@@ -1,0 +1,40 @@
+<!-- Trạng thái đang tải -->
+<div *ngIf="loading" class="loading-message">
+    Đang tải dữ liệu, vui lòng chờ...
+</div>
+
+<!-- Trạng thái lỗi -->
+<div *ngIf="errorMessage" class="error-message">
+    ⚠️ {{ errorMessage }}
+</div>
+
+<!-- Nội dung chính khi có dữ liệu booking và tour -->
+<div *ngIf="!loading && !errorMessage && booking && tour" class="tour-card">
+    <img [src]="tour.linkImage" alt="Hình ảnh tour" />
+    <div class="tour-info">
+        <p>Trạng thái:
+            <span [ngSwitch]="booking.status">
+                <span *ngSwitchCase="0" style="color: green;"></span>
+                <span *ngSwitchCase="1" style="color: blue;">Đã đi xong</span>
+                <span *ngSwitchCase="2" style="color: rgb(255, 0, 0);">Đã hủy</span>
+                <span *ngSwitchCase="3" style="color: red;">Công ty du lịch Hủy đột xuất</span>
+                <span *ngSwitchDefault>Không xác định</span>
+            </span>
+        </p>
+
+        <h3>Mã Hóa đơn: <strong>{{ booking.bookingId }}</strong></h3>
+        <p>Thời gian tạo hoá đơn: {{ booking.daytimeCreate | date: 'dd/MM/yyyy' }}</p>
+        <p>Mã khách hàng: {{ booking.userId }}</p>
+        <p>Tên khách hàng: {{ booking.userName }}</p>
+        <p>Mã tour: {{ booking.tourId }}</p>
+        <p>Tên Tour: {{ booking.tourName }}</p>
+        <p>Điểm khởi hành: {{ tour.startDestination }}</p>
+        <p>Điểm đến: {{ tour.thoughoutDestination.slice(0, 3).join(', ') }}</p>
+        <p>Thời gian: <strong>{{ tour.dayNumber }}N{{ tour.nightNumber }}Đ</strong></p>
+        <p>Ngày xuất phát: {{ booking.daytimeStart | date: 'dd/MM/yyyy' }}</p>
+        <p>Số chỗ đã hủy: {{ booking.slotReserved }} chỗ</p>
+        <p>Tổng tiền: {{ booking.totalPurchase | number:'1.0-0'}} VND</p>
+
+        <button class="detail-button" (click)="goToDetail()">Xem chi tiết</button>
+    </div>
+</div>

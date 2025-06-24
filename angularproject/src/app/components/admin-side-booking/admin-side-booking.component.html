@@ -1,0 +1,45 @@
+<!--<div class="booking-card">-->
+<!--    <p> Trạng thái:-->
+<!--        <span [ngSwitch]="booking?.status">-->
+<!--            <span *ngSwitchCase="0" style="color: green;"></span>-->
+<!--            <span *ngSwitchCase="1" style="color: blue;">Hóa đơn của Tour đã hoàn thành</span>-->
+<!--            <span *ngSwitchCase="2" style="color: gray;">Khách hàng dã hủy</span>-->
+<!--            <span *ngSwitchCase="3" style="color: red;">Hệ thống Hủy đột xuất</span>-->
+<!--            <span *ngSwitchDefault>Không xác định</span>-->
+<!--        </span>-->
+<!--    </p>-->
+<!--    <h3>Mã Hóa đơn: <strong style="color: red;">{{ booking?.bookingId }}</strong></h3>-->
+<!--    <p>Thời gian tạo hóa đơn: {{ booking?.daytimeCreate | date: 'dd/MM/yyyy'}}</p>-->
+<!--    <p>Mã KH: {{ booking?.userId }}</p>-->
+<!--    <p>Tên KH: {{ booking?.userName }}</p>-->
+<!--    <p>Mã tour: {{ booking?.tourId }}</p>-->
+<!--    <p>Tên tour: {{ booking?.tourName }}</p>-->
+<!--    <p>Ngày xuất phát: {{ booking?.daytimeStart }}</p>-->
+<!--    <p>Số chỗ đã đặt: {{ booking?.slotReserved }} chỗ</p>-->
+<!--    <p>Tổng tiền: {{ booking?.totalPurchase | number:'1.0-0' }}VNĐ</p>-->
+<!--</div>-->
+<div class="tour-card">
+
+    <div class="tour-info">
+      <p>Trạng thái:
+        <span [ngSwitch]="booking?.status">
+                    <span *ngSwitchCase="0" style="color: green;"></span>
+                    <span *ngSwitchCase="1" style="color: blue;">Hóa đơn của Tour đã hoàn thành</span>
+                    <span *ngSwitchCase="2" style="color: gray;">Khách hàng đã hủy</span>
+                    <span *ngSwitchCase="3" style="color: red;">Hệ thống Hủy đột xuất</span>
+                    <span *ngSwitchDefault>Không xác định</span>
+                </span>
+      </p>
+      <h3>Mã Hóa đơn: <strong style="color: red;">{{ booking?.bookingId }}</strong></h3>
+      <p>Thời gian tạo hóa đơn: {{ booking?.daytimeCreate | date: 'dd/MM/yyyy'}}</p>
+      <p>Mã KH: {{ booking?.userId }}</p>
+      <p>Tên KH: {{ booking?.userName }}</p>
+    </div>
+    <div class="tour-info">
+      <p>Mã tour: {{ booking?.tourId }}</p>
+      <p>Tên tour: {{ booking?.tourName }}</p>
+      <p>Ngày xuất phát: {{ booking?.daytimeStart }}</p>
+      <p>Số chỗ đã đặt: {{ booking?.slotReserved }} chỗ</p>
+      <p>Tổng tiền: {{ booking?.totalPurchase | number:'1.0-0' }}VNĐ</p>
+    </div>
+</div>

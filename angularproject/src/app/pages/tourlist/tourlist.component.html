@@ -1,0 +1,51 @@
+<app-header></app-header>
+<section class="discover">
+    <div class="filter-container">
+        <!-- Điểm đến -->
+        <div class="filter-group">
+            <label class="filter-label">Điểm Đến</label>
+            <select class="filter-select" [(ngModel)]="selectedDestination" (change)="filterTours()">
+                <option value="">Tất cả</option>
+                <option *ngFor="let d of destinations" [value]="d">{{ d }}</option>
+            </select>
+        </div>
+
+        <!-- Điểm khởi hành -->
+        <div class="filter-group">
+            <label class="filter-label">Điểm Khởi Hành</label>
+            <select class="filter-select" [(ngModel)]="selectedDeparture" (change)="filterTours()">
+                <option value="">Tất cả</option>
+                <option *ngFor="let d of departures" [value]="d">{{ d }}</option>
+            </select>
+        </div>
+
+        <!-- Ngày -->
+        <div class="filter-group">
+            <label class="filter-label">Chọn Ngày</label>
+            <input type="date" class="filter-date" [(ngModel)]="selectedDate" (change)="filterTours()">
+        </div>
+    </div>
+
+    <!-- Danh sách tour -->
+    <div class="tour-container">
+        <div class="filter-group">
+            <label class="filter-label">Sắp xếp theo</label>
+            <select class="filter-select" [(ngModel)]="selectedType" (change)="onTypeChange()">
+                <option *ngFor="let type of typeList; index as i" [value]="i + 1">
+                    {{ type }}
+                </option>
+            </select>
+        </div>
+
+        <div *ngFor="let tour of tours">
+            <app-tour-card-info [tour]="tour"></app-tour-card-info>
+        </div>
+    </div>
+
+    <div class="pagination" *ngIf="totalPages > 1">
+        <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">← Trước</button>
+        <span>Trang {{ currentPage }} / {{ totalPages }}</span>
+        <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Sau →</button>
+    </div>
+</section>
+<app-footer></app-footer>

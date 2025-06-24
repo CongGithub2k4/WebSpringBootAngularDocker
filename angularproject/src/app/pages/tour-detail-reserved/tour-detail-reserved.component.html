@@ -1,0 +1,75 @@
+<app-header></app-header>
+<!-- Trạng thái đang tải -->
+<div *ngIf="loading" class="loading-message" style="margin-top: 100px;">
+    Đang tải dữ liệu, vui lòng chờ...
+</div>
+
+<!-- Trạng thái lỗi -->
+<div *ngIf="errorMessage" class="error-message" style="margin-top: 100px;">
+    ⚠️ {{ errorMessage }}
+</div>
+
+
+<!-- Nội dung chính khi có dữ liệu booking và tour -->
+<div *ngIf="!loading && !errorMessage && booking && tour && (booking?.status !== 2) && (booking?.status !== 3)" class="tour-detail-content">
+    <div class="image-booking">
+        <div class="grid-item" style="box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.3);">
+            <img [src]="tour.linkImage" alt="Hình ảnh tour" />
+        </div>
+    </div>
+    <div class="tour-info">
+        <p>Trạng thái:
+            <span [ngSwitch]="booking.status">
+                <span *ngSwitchCase="0" style="color: green;">Chưa đi</span>
+                <span *ngSwitchCase="1" style="color: blue;">Đã đi xong</span>
+                <span *ngSwitchCase="2" style="color: rgb(255, 0, 0);">Đã hủy</span>
+                <span *ngSwitchCase="3" style="color: red;">Công ty du lịch Hủy đột xuất</span>
+                <span *ngSwitchDefault>Không xác định</span>
+            </span>
+        </p>
+
+        <h3>Mã Hóa đơn: <strong>{{ booking.bookingId }}</strong></h3>
+        <p>Thời gian tạo hoá đơn: {{ booking.daytimeCreate | date: 'dd/MM/yyyy' }}</p>
+        <p>Mã khách hàng: {{ booking.userId }}</p>
+        <p>Tên khách hàng: {{ booking.userName }}</p>
+        <p>Mã tour: {{ booking.tourId }}</p>
+        <p>Tên Tour: {{ booking.tourName }}</p>
+        <p>Điểm khởi hành: {{ tour.startDestination }}</p>
+        <p>Các điểm đến: </p>
+        <ul>
+            <li
+                *ngFor="let point of (showAllDestinations ? tour.thoughoutDestination : tour.thoughoutDestination.slice(0, 3))">
+                {{ point }}
+            </li>
+        </ul>
+        <button *ngIf="tour.thoughoutDestination.length > 3" (click)="toggleShowAllDestinations()">
+            {{ showAllDestinations ? 'Thu gọn' : 'Xem thêm' }}
+        </button>
+        <p>Thời gian: <strong>{{ tour.dayNumber }}N{{ tour.nightNumber }}Đ</strong></p>
+        <p>Ngày khởi hành: <strong>{{ tour.daytimeStart | date: 'dd/MM/yyyy' }}</strong></p>
+        <p>Số chỗ đã đặt: {{ booking.slotReserved }} chỗ</p>
+        <p>Tổng tiền: {{ booking.totalPurchase | number:'1.0-0' }} VND</p>
+
+        <div style="display: flex; justify-content: space-between;">
+            <button class="detail-button" (click)="gotoSearch()">Đặt vé các Tour tương tự khác</button>
+            <button class="detail-button" style="background-color: red;" (click)="gotoCancel()">Hủy Hóa đơn</button>
+        </div>
+
+        <!-- Modal hủy Booking-->
+        <div class="modal" *ngIf="showConfirmModal">
+            <div class="modal-content">
+                <p>Bạn có chắc chắn muốn hủy đơn không?</p>
+                <!--label for="seatCount">Số chỗ cần đặt:</label>
+                <input type="number" id="seatCount" [(ngModel)]="seatCount" min="1" [max]="remainingSeats"
+                    style="width: 60px;" />
+                <p *ngIf="!validateSeats()" style="color: red;">Số chỗ không hợp lệ!</p-->
+                <br />
+                <div style="display: flex; justify-content: space-between;">
+                    <button class="detail-button" (click)="cancelBooking()">Xác nhận Hủy</button>
+                    <button class="detail-button" style="background-color: red;" (click)="closeCancelModal()">Hủy thao
+                        tác</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

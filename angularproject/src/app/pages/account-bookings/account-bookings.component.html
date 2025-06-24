@@ -1,0 +1,124 @@
+<app-header></app-header>
+<section class="discover">
+  <!-- TAB HEADER -->
+  <div class="filter-container">
+    <a class="filter-category" [ngClass]="{ active: currentTab === 'account' }" (click)="switchTab('account')">Thông tin
+      tài khoản</a>
+    <a class="filter-category" [ngClass]="{ active: currentTab === 'reserved' }" (click)="switchTab('reserved')">Tour
+      sẵn có</a>
+    <a class="filter-category" [ngClass]="{ active: currentTab === 'moved' }" (click)="switchTab('moved')">Tour đã
+      đi</a>
+    <a class="filter-category" [ngClass]="{ active: currentTab === 'canceled' }" (click)="switchTab('canceled')">Tour đã
+      hủy</a>
+    <a class="filter-category" [ngClass]="{ active: currentTab === 'admincanceled' }"
+      (click)="switchTab('admincanceled')">Tour hủy đột xuất bởi Hãng</a>
+  </div>
+
+  <!-- ERROR -->
+  <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+  <!--TAB ACCOUNT INFOMATION-->
+  <div *ngIf="currentTab === 'account'" class="tour-container">
+    <div class="title">Thông tin cá nhân</div>
+    <div class="form-group">
+      <label>Họ tên :</label>
+      <input type="text" [(ngModel)]="user.userName">
+    </div>
+
+    <div class="form-group">
+      <label>Email:</label>
+      <input type="email" [(ngModel)]="email" (change)="checkConflictEmail(user.email)">
+      <p *ngIf="isConflictEmail" style="color: red;">Email này đã được tài khoản khác dùng</p>
+    </div>
+
+    <div class="form-group">
+      <label for="password">Mật khẩu mới:</label>
+      <div class="password-container">
+        <input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="userPassword"
+          placeholder="Nhập mật khẩu mới (để trống nếu không thay đổi)" (change)="checkLengthPassword(userPassword)" />
+        <p *ngIf="!validPassword" style="color: red;">Mật khẩu phải dài ít nhất 6 ký tự và không có khoảng trắng</p>
+        <button class="detail-button" (click)="togglePasswordVisibility()"
+          [attr.aria-label]="showPassword ? 'Ẩn mật khẩu' : 'Hiển thị mật khẩu'">
+          {{ showPassword ? 'Ẩn' : 'Hiện' }}
+        </button>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Số điện thoại:</label>
+      <input type="text" [(ngModel)]="phoneNumber" (change)="checkConflictPhone(user.phoneNumber)">
+      <p *ngIf="isConflictPhone" style="color: red;">SĐT này đã được tài khoản khác dùng</p>
+    </div>
+
+    <div class="form-group">
+      <label>Địa chỉ:</label>
+      <input type="text" [(ngModel)]="user.userAddress">
+    </div>
+
+    <!-- Success and Error Messages (for account tab) -->
+    <div *ngIf="successMessage" style="color: green;">
+      {{ successMessage }}
+    </div>
+    <div *ngIf="errorMessage && currentTab === 'account'" style="color: red;">
+      {{ errorMessage }}
+    </div>
+    <div style="display: flex; justify-content: space-between;">
+      <button class="detail-button" style="align-self: end;" (click)="update()">Cập nhật</button>
+      <button class="detail-button" style="align-self: end; background-color: rgba(255, 0, 0, 0.614);"
+        (click)="logout()">Đăng xuất</button>
+    </div>
+  </div>
+
+  <!-- TAB: BOOKING -->
+  <div *ngIf=" currentTab==='reserved' " class="tour-container">
+    <div *ngFor="let booking of filteredBookings">
+      <app-tour-card-reserved [booking]="booking"></app-tour-card-reserved>
+    </div>
+    <!-- PHÂN TRANG -->
+    <div class="pagination" *ngIf="totalPages > 1">
+      <button *ngFor="let page of [].constructor(totalPages); let i = index" class="page-button"
+        [class.active]="currentPage === (i + 1)" (click)="goToPage(i + 1)">
+        {{ i + 1 }}
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf=" currentTab==='moved' " class="tour-container">
+    <div *ngFor="let booking of filteredBookings">
+      <app-tour-card-done [booking]="booking"></app-tour-card-done>
+    </div>
+    <!-- PHÂN TRANG -->
+    <div class="pagination" *ngIf="totalPages > 1">
+      <button *ngFor="let page of [].constructor(totalPages); let i = index" class="page-button"
+        [class.active]="currentPage === (i + 1)" (click)="goToPage(i + 1)">
+        {{ i + 1 }}
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf=" currentTab==='canceled' " class="tour-container">
+    <div *ngFor="let booking of filteredBookings">
+      <app-tour-card-canceled [booking]="booking"></app-tour-card-canceled>
+    </div>
+    <!-- PHÂN TRANG -->
+    <div class="pagination" *ngIf="totalPages > 1">
+      <button *ngFor="let page of [].constructor(totalPages); let i = index" class="page-button"
+        [class.active]="currentPage === (i + 1)" (click)="goToPage(i + 1)">
+        {{ i + 1 }}
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf=" currentTab==='admincanceled' " class="tour-container">
+    <div *ngFor="let booking of filteredBookings">
+      <app-tour-card-canceled-byadmin [booking]="booking"></app-tour-card-canceled-byadmin>
+    </div>
+    <!-- PHÂN TRANG -->
+    <div class="pagination" *ngIf="totalPages > 1">
+      <button *ngFor="let page of [].constructor(totalPages); let i = index" class="page-button"
+        [class.active]="currentPage === (i + 1)" (click)="goToPage(i + 1)">
+        {{ i + 1 }}
+      </button>
+    </div>
+  </div>
+</section>

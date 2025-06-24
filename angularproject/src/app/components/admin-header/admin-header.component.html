@@ -1,0 +1,27 @@
+<!-- header section start-->
+<header style="backface-visibility: visible; background-color:  rgba(0, 108, 228, 1);">
+    <ul class="logo">
+        <a class="logo" style="font-family:'Times New Roman', Times, serif;" (click)="goToBooking()">Travel Chill</a>
+    </ul>
+    <ul class="navbar" [ngClass]="{ 'open': isMenuOpen || screenWidth > 800 }">
+        <!--li><a routeLink="admin/tourlist" (click)="closeMenu()">Trang chủ</a></li-->
+        <li><a (click)="goToBooking()">Quản Lý Đơn</a></li>
+        <li><a (click)="goToTourlist()"> Quản lý các Tour</a></li>
+        <li><a (click)="goToUserList()">Quản lý khách hàng</a></li>
+    </ul>
+    <!-- Account & Hamburger -->
+    <div class="h-right">
+        <!-- <a class="nav-btn">Tài khoản</a> -->
+        <div class="account-dropdown" (click)="toggleAccountMenu()">
+            <a class="nav-btn">Tài khoản</a>
+            <div class="dropdown-menu" *ngIf="isAccountMenuOpen">
+                <button class="logout-btn" (click)="logout()">Đăng xuất</button>
+            </div>
+        </div>
+        <div class="hamburger" (click)="toggleMenu()" *ngIf="screenWidth <= 800">
+            <span [class.active]="isMenuOpen"></span>
+            <span [class.active]="isMenuOpen"></span>
+            <span [class.active]="isMenuOpen"></span>
+        </div>
+    </div>
+</header>

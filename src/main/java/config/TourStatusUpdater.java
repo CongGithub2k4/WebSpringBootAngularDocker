@@ -1,0 +1,80 @@
+package config;
+
+import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+/***
+ * @PostConstruct chỉ đảm bảo bean đã được tạo,
+ * nhưng không đảm bảo infrastructure như DB pool đã xong.
+ * vì khi start APPLICATION, thì hàm thay đổi DB sẽ chạy tước khi
+ * Hikari kết nốt connection đến DB thành công. vậy nên
+ * Phải cấu hình nó sau khi khởi động tất cả xong.
+ * // @EventListener(ApplicationReadyEvent.class)
+ * Ưu điểm của cách này:
+ * Không phụ thuộc vào @PostConstruct.
+ * Đảm bảo connection pool (HikariCP) đã hoàn tất kết nối.
+ * Không có race condition giữa quá trình khởi tạo và thao tác DB.
+ */
+@Component
+public class TourStatusUpdater {
+
+    private final JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    public TourStatusUpdater(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+    @Transactional
+    public void chageTourToGoing(String sql) {
+        jdbcTemplate.update(sql);
+    }
+    @Transactional
+    public void chageTourToGone(String sql2) {
+        jdbcTemplate.update(sql2);
+    }
+    @Transactional
+    public void chageBookingToGone(String sql3) {
+        jdbcTemplate.update(sql3);
+    }
+    //@PostConstruct
+
+    @EventListener(ApplicationReadyEvent.class)
+    public void updateTourStatusesOnStartup() {
+        String sql = "UPDATE TourParticular tp \n" +
+            " SET tp.status = 1 \n" +
+            " WHERE tp.daytime_start <= SYSDATE \n" +
+            "  AND EXISTS ( \n" +
+            "    SELECT 1 \n" +
+            "    FROM Tour t \n" +
+            "    WHERE t.tour_id = tp.tour_id \n" +
+            "      AND tp.daytime_start + t.day_number >= SYSDATE \n" +
+            "  )";
+        String sql2 = "UPDATE TourParticular tp \n" +
+            " SET tp.status = 2 \n" +
+            " WHERE EXISTS ( \n" +
+            "    SELECT 1 \n" +
+            "    FROM Tour t \n" +
+            "    WHERE t.tour_id = tp.tour_id \n" +
+            "      AND tp.daytime_start + t.day_number < SYSDATE \n" +
+            "  )";
+        String sql3 = "UPDATE Booking b \n" +
+            "SET b.status = 1 \n" +
+            "WHERE EXISTS ( \n" +
+            "    SELECT 1 \n" +
+            "    FROM Tour t \n" +
+            "    WHERE t.tour_id = b.tour_id \n" +
+            "      AND b.daytime_start + t.day_number < SYSDATE \n" +
+            "  )";
+        System.out.println("\n\n Đang chạy hàm update database \n\n");
+
+        chageTourToGoing(sql);
+        chageTourToGone(sql2);
+        chageBookingToGone(sql3);
+    }
+}
