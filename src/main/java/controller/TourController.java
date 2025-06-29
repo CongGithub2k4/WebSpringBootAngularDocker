@@ -84,23 +84,6 @@ public class TourController {
 		}
 	}
 
-	// http://localhost:8080/tour/add-new-tour
-	/*@PostMapping("/add-new-tour")
-	public ResponseEntity<Map<String, Object>> addTour(@RequestBody TourParticular tour) {
-		try {
-            if (!ExtractFromSpringSecurityContext.extractIsAdminFromSecurityContext()) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-            }
-			Long userId = ExtractFromSpringSecurityContext.extractUserIdFromSecurityContext();
-            tourService.addNewTour(tour, userId);
-            return ResponseEntity.ok().build();
-        } catch (RuntimeException ex) {
-            Map<String, Object> error = new HashMap<>();
-            error.put("message", "Bạn không có quyền Admin, hoặc chưa đăng nhập với quyền Admin, hoặc lỗi thông tin ");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
-        }
-	}*/
-
 	//http://localhost:8080/tour/add-new-tour
 	@PostMapping(value = "/add-new-tour", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<?> createTour(
@@ -189,8 +172,6 @@ public class TourController {
 		}
 	}
 
-	// admin lọc theo từng tour_id  hoặc khi user xem booking và muốn đặt lại
-	// tour thì sẽ nhảy sang trang search và tìm với tour_id và status chỉ =0
 	// http://localhost:8080/tour/get-tour-by-id-status?tourId=1&status=0&page=1&type=1
 	@GetMapping("/get-tour-by-id-status")
 	public ResponseEntity<Map<String, Object>> getTourParticularsByIdAndStatus(
@@ -236,15 +217,7 @@ public class TourController {
 		@RequestParam(defaultValue = "1") int page,
 		@RequestParam(defaultValue = "1") int type) {
 
-
 		String orderByClause;
-//		= switch (type) {
-//			case 1 -> "(tp.total_slot - tp.slot_remain) DESC"; // được đặt nhiều nhất
-//			case 2 -> "(tp.total_slot - tp.slot_remain) ASC";  // ít được đặt nhất
-//			case 3 -> "tp.daytime_start ASC";                 // sớm nhất
-//			case 4 -> "tp.daytime_start DESC";                // muộn nhất
-//			default -> "tp.daytime_start ASC";                // mặc định
-//		};
 		if(type==1) orderByClause= "tp.daytime_start ASC";
 		else if(type==2) orderByClause= "tp.daytime_start DESC";
 		else if(type==3) orderByClause= "(tp.total_slot - tp.slot_remain) DESC";
@@ -299,7 +272,6 @@ public class TourController {
 		return ResponseEntity.ok(tourParticulars);
 	}
 
-	//User ở giao diện chỉ được dùng status =0
 	// http://localhost:8080/tour/get-tour-by-status/0?page=1
 	@GetMapping("/get-tour-by-status/{status}")
 	public ResponseEntity<Map<String, Object>> getToursByStatus(

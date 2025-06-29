@@ -84,8 +84,6 @@ public class TourService {
     }
 
     public Map<String, Object> findAllTourParticularBy_Start_End_DaytimeStart_Status(String start_destination, String thoughout_destination, Date daytime_start, Integer status, int currentPage,String orderByClause) {
-        //Integer totalTours = tourDAO.TOTALfindAllTourParticularBy_Start_End_DaytimeStart_Status(start_destination,thoughout_destination,daytime_start.toLocalDate(),status);
-        //List<TourParticular> tours= tourDAO.findAllTourParticularBy_Start_End_DaytimeStart_Status(start_destination,thoughout_destination,daytime_start.toLocalDate(),status,currentPage);
         Integer totalTours = Optional.ofNullable(
                 tourDAO.TOTALfindAllTourParticularBy_Start_End_DaytimeStart_Status(start_destination,thoughout_destination,daytime_start.toLocalDate(),status))
         .orElse(0);
@@ -103,8 +101,6 @@ public class TourService {
         return response;
     }
     public Map<String, Object> findAllTourParticularBy_Start_Status(String start_destination, Integer status, int currentPage, String orderByClause) {
-        //Integer totalTours = tourDAO.TOTALfindAllTourParticularBy_Start_Status(start_destination,status);
-        //List<TourParticular> tours= tourDAO.findAllTourParticularBy_Start_Status(start_destination,status,currentPage);
         Integer totalTours = Optional.ofNullable(
                         tourDAO.TOTALfindAllTourParticularBy_Start_Status(start_destination,status))
                 .orElse(0);
@@ -122,8 +118,6 @@ public class TourService {
         return response;
     }
     public Map<String, Object> findAllTourParticularBy_End_Status(String thoughout_destination, Integer status, int currentPage, String orderByClause) {
-        //Integer totalTours = tourDAO.TOTALfindAllTourParticularBy_End_Status(thoughout_destination,status);
-        //List<TourParticular> tours= tourDAO.findAllTourParticularBy_End_Status(thoughout_destination,status,currentPage);
         Integer totalTours = Optional.ofNullable(
                         tourDAO.TOTALfindAllTourParticularBy_End_Status(thoughout_destination,status))
                 .orElse(0);
@@ -141,8 +135,6 @@ public class TourService {
         return response;
     }
     public Map<String, Object> findAllTourParticularBy_DaytimeStart_Status(Date daytime_start, Integer status, int currentPage, String orderByClause) {
-        //Integer totalTours = tourDAO.TOTALfindAllTourParticularBy_DaytimeStart_Status(daytime_start.toLocalDate(),status);
-        //List<TourParticular> tours= tourDAO.findAllTourParticularBy_DaytimeStart_Status(daytime_start.toLocalDate(),status,currentPage);
         Integer totalTours = Optional.ofNullable(
                         tourDAO.TOTALfindAllTourParticularBy_DaytimeStart_Status(daytime_start.toLocalDate(),status))
                 .orElse(0);
@@ -160,8 +152,6 @@ public class TourService {
         return response;
     }
     public Map<String, Object> findAllTourParticularBy_Start_DaytimeStart_Status(String start_destination, Date daytime_start, Integer status, int currentPage, String orderByClause) {
-        //Integer totalTours = tourDAO.TOTALfindAllTourParticularBy_Start_DaytimeStart_Status(start_destination,daytime_start.toLocalDate(),status);
-        //List<TourParticular> tours= tourDAO.findAllTourParticularBy_Start_DaytimeStart_Status(start_destination,daytime_start.toLocalDate(),status,currentPage);
         Integer totalTours = Optional.ofNullable(
                         tourDAO.TOTALfindAllTourParticularBy_Start_DaytimeStart_Status(start_destination,daytime_start.toLocalDate(),status))
                 .orElse(0);
@@ -179,8 +169,6 @@ public class TourService {
         return response;
     }
     public Map<String, Object> findAllTourParticularBy_End_DaytimeStart_Status(String thoughout_destination, Date daytime_start, Integer status, int currentPage, String orderByClause) {
-        //Integer totalTours = tourDAO.TOTALfindAllTourParticularBy_End_DaytimeStart_Status(thoughout_destination,daytime_start.toLocalDate(),status);
-        //List<TourParticular> tours= tourDAO.findAllTourParticularBy_End_DaytimeStart_Status(thoughout_destination,daytime_start.toLocalDate(),status,currentPage);
         Integer totalTours = Optional.ofNullable(
                         tourDAO.TOTALfindAllTourParticularBy_End_DaytimeStart_Status(thoughout_destination,daytime_start.toLocalDate(),status))
                 .orElse(0);
@@ -198,8 +186,6 @@ public class TourService {
         return response;
     }
     public Map<String, Object> findAllTourParticularBy_Start_End_Status(String start_destination, String thoughout_destination, Integer status, int currentPage, String orderByClause) {
-        //Integer totalTours = tourDAO.TOTALfindAllTourParticularBy_Start_End_Status(start_destination,thoughout_destination,status);
-        //List<TourParticular> tours= tourDAO.findAllTourParticularBy_Start_End_Status(start_destination,thoughout_destination,status,currentPage);
         Integer totalTours = Optional.ofNullable(
                         tourDAO.TOTALfindAllTourParticularBy_Start_End_Status(start_destination,thoughout_destination,status))
                 .orElse(0);
@@ -218,8 +204,6 @@ public class TourService {
     }
 
     public Map<String, Object> findAllTourByStatus(Integer status, int currentPage, String orderByClause) {
-        //Integer totalTours = tourDAO.TOTALfindAllTourByStatus(status);
-        //List<TourParticular> tours= tourDAO.findAllTourByStatus(status,currentPage);
         Integer totalTours = Optional.ofNullable(
                         tourDAO.TOTALfindAllTourByStatus(status))
                 .orElse(0);

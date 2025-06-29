@@ -8,7 +8,6 @@ import java.util.Collection;
 import java.util.List;
 
 public class CustomUserDetails implements UserDetails {
-
 	private final Long userId;
 	private final String userName;
 	private final String email;

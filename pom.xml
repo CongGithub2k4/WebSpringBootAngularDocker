@@ -18,7 +18,7 @@
 	<description>Project for Spring Boot with Oracle</description>
 
 	<properties>
-		<java.version>21</java.version>
+		<java.version>24</java.version>
 		<oracle.jdbc.version>21.3.0.0</oracle.jdbc.version>
 	</properties>
 
@@ -109,7 +109,7 @@
 						<path>
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
-							<version>1.18.30</version>
+							<version>1.18.38</version>
 						</path>
 					</annotationProcessorPaths>
 				</configuration>

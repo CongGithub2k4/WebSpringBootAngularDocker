@@ -7,19 +7,6 @@ import org.springframework.context.event.EventListener;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-/***
- * @PostConstruct chỉ đảm bảo bean đã được tạo,
- * nhưng không đảm bảo infrastructure như DB pool đã xong.
- * vì khi start APPLICATION, thì hàm thay đổi DB sẽ chạy tước khi
- * Hikari kết nốt connection đến DB thành công. vậy nên
- * Phải cấu hình nó sau khi khởi động tất cả xong.
- * // @EventListener(ApplicationReadyEvent.class)
- * Ưu điểm của cách này:
- * Không phụ thuộc vào @PostConstruct.
- * Đảm bảo connection pool (HikariCP) đã hoàn tất kết nối.
- * Không có race condition giữa quá trình khởi tạo và thao tác DB.
- */
 @Component
 public class TourStatusUpdater {
 

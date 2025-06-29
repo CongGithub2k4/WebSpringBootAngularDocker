@@ -95,18 +95,6 @@ public class UserDAO {
 		}
 	}
 
-	/*public List<UserDTO> adminGetAllUsers(int offset, int limit) {
-		String sql = "SELECT sub.* FROM (" +
-			"   SELECT u.*, ROW_NUMBER() OVER (ORDER BY user_id) rn FROM UserTable u WHERE u.is_admin = 0" +
-			") sub WHERE sub.rn BETWEEN ? + 1 AND ? + ?";
-		List<User> userList = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class), offset, offset, limit);
-		ArrayList<UserDTO> userDTOList = new ArrayList<>();
-		for (User u : userList) {
-			userDTOList.add(new UserDTO(u.getUserId(), u.getUserName(), u.getEmail(), u.getPhoneNumber(), u.getUserAddress(), u.getIsAdmin()));
-		}
-		return userDTOList.stream().toList();
-	}*/
-
 	public int getTotalUsers() {
 		String sql = "SELECT COUNT(*) FROM UserTable WHERE is_admin = 0";
 		return jdbcTemplate.queryForObject(sql, Integer.class);
@@ -115,12 +103,6 @@ public class UserDAO {
 	public List<AdminUserDTO> adminGetAllUsers(int offset, int limit, int type) {
 		String sql;
 		String orderBy;
-		//type=1: lấy user theo ngày tham gia lấu nhất,
-		//typ=2: lấy user theo ngày tham gia sớm nhất
-		//type =3: lấy user theo tổng booking tăng dần, "ORDER BY COUNT(b.booking_id) ASC, COALESCE(SUM(b.total_purchase), 0) ASC"
-		// type=4 : ấy user theo tổng booking giảm dần, "ORDER BY COUNT(b.booking_id) DESC, COALESCE(SUM(b.total_purchase), 0) DESC"
-		// type=5 : lấy user theo tổng số tiền tăng dần, "ORDER BY COALESCE(SUM(b.total_purchase), 0) ASC, COUNT(b.booking_id) ASC"
-		// type=6 : lấy user theo tổng số tiền giảm dần, "ORDER BY COALESCE(SUM(b.total_purchase), 0) DESC, COUNT(b.booking_id) DESC"
 		if (type == 1) orderBy = "ORDER BY u.user_id DESC";
 		else if (type == 2) orderBy = "ORDER BY u.user_id ASC";
 		else if (type == 3) orderBy = "ORDER BY COUNT(b.booking_id) ASC, COALESCE(SUM(b.total_purchase), 0) ASC";

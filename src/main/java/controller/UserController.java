@@ -156,9 +156,6 @@ public class UserController {
         try {
             Long userId = ExtractFromSpringSecurityContext.extractUserIdFromSecurityContext();
             User user = userService.userGetInfoById(userId);
-            /*if (ExtractFromSpringSecurityContext.extractIsAdminFromSecurityContext()) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-            }*/
             if (user != null) {
                 return new ResponseEntity<>(user, HttpStatus.OK);
             } else {

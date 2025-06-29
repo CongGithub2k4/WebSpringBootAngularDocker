@@ -14,10 +14,10 @@ import java.util.UUID;
 @Service
 public class ImageStorageService {
 
-	// ✅ Thư mục lưu ảnh: uploads/ nằm ngang hàng với src/
+	// Thư mục lưu ảnh: uploads/ nằm ngang hàng với src/
 	private final Path storagePath = Paths.get("uploads");
 
-	// ✅ Đường dẫn ảnh qua HTTP để Angular truy cập
+	// Đường dẫn ảnh qua HTTP để Angular truy cập
 	private final String imageBaseUrl = "http://localhost:8080/images/";
 
 	/**

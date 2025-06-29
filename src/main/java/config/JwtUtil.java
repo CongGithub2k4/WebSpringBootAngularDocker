@@ -12,33 +12,33 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-	private static final String SECRET = "your-256-bit-secret-your-256-bit-secret"; // >= 32 ký tự
+	private static final String SECRET = "my-256-bit-secret-account-256-bit-secret";
 	private final SecretKey key = Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
 
 	public String generateToken(User user) {
 		return Jwts.builder()
-			.subject(user.getEmail())                         // setSubject() → subject()
-			.claim("userId", user.getUserId())                // claim vẫn dùng được
+			.subject(user.getEmail())
+			.claim("userId", user.getUserId())
 			.claim("isAdmin", user.getIsAdmin())
-			.issuedAt(new Date())                             // setIssuedAt() → issuedAt()
+			.issuedAt(new Date())
 			.expiration(new Date(System.currentTimeMillis() + 86400000))
-			.signWith(key, Jwts.SIG.HS256)                    // Cách mới để chọn thuật toán
+			.signWith(key, Jwts.SIG.HS256)
 			.compact();
 	}
 
 
 	public Claims extractAllClaims(String token) {
-		return Jwts.parser()                // parser() mới của jjwt 0.12.x
-			.verifyWith(key)               // KHÔNG dùng .setSigningKey nữa
+		return Jwts.parser()
+			.verifyWith(key)
 			.build()
-			.parseSignedClaims(token)      // dùng parseSignedClaims (không phải parseClaimsJws)
-			.getPayload();                 // trả về Claims payload
+			.parseSignedClaims(token)
+			.getPayload();
 	}
 
 	public boolean validateToken(String token) {
 		try {
 			Claims claims = extractAllClaims(token);
-			return claims != null; // đơn giản là dùng claims
+			return claims != null;
 		} catch (JwtException | IllegalArgumentException e) {
 			return false;
 		}

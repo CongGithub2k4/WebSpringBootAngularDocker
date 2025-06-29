@@ -10,7 +10,6 @@ import java.util.List;
 
 @Getter
 @Setter
-//@AllArgsConstructor
 public class Tour {
     private Long tourId;
     private String startDestination;

@@ -79,44 +79,6 @@ public class TourDAO {
      * Tour, TourParticular, TourDestination
      * @param tour
      */
-//    public void addNewTour(TourParticular tour, Long user_id) {
-//        String query = "SELECT admin_id FROM AdminTable WHERE user_id = ?";
-//        Integer admin_id = jdbcTemplate.queryForObject(query, Integer.class, user_id);
-//        // Insert vào bảng Tour trước và lấy ra tour_id
-//        SimpleJdbcInsert insertTour = new SimpleJdbcInsert(jdbcTemplate)
-//                .withTableName("Tour")
-//                .usingGeneratedKeyColumns("tour_id");
-//
-//        Map<String, Object> tourParams = new HashMap<>();
-//        tourParams.put("start_destination", tour.getStartDestination());
-//        tourParams.put("tour_name", tour.getTourName());
-//        tourParams.put("day_number", tour.getDayNumber());
-//        tourParams.put("night_number", tour.getNightNumber());
-//        tourParams.put("link_image", tour.getLinkImage());
-//        tourParams.put("admin_id_create_tour", admin_id);
-//
-//        Number tourId = insertTour.executeAndReturnKey(tourParams);
-//
-//        //Vì lệnh bên trên khi chèn thông tin Tour nó để trống cột daytime_create_tour mặc
-//        // dù cột này DEFAULT SYSDATE . Chỉ có lệnh INSERT ... mới khiến nó tự cập nhật
-//        String sql_add = "UPDATE Tour SET daytime_create_tour = SYSDATE WHERE tour_id = ?";
-//        jdbcTemplate.update(sql_add,tourId);
-//
-//        // Insert vào TourParticular
-//        String sqlParticular = "INSERT INTO TourParticular " +
-//                "(tour_id, daytime_start, total_slot, slot_remain, price, admin_id) " +
-//                "VALUES (?, ?, ?, ?, ?, ?)";
-//
-//        jdbcTemplate.update(sqlParticular,
-//                tourId.longValue(),
-//                java.sql.Date.valueOf(tour.getDaytimeStart()), // LocalDate -> java.sql.Date
-//                tour.getTotalSlot(),
-//                tour.getSlotRemain(),
-//                tour.getPrice(),
-//                admin_id);
-//        //Thêm vào bảng TourDestination
-//        insertDestination(tour.getThoughoutDestination(), tourId);
-//    }
     public void addNewTour(TourParticular tour, Long user_id) {
         Integer admin_id;
         try {
@@ -131,8 +93,6 @@ public class TourDAO {
             e.printStackTrace();
             throw new RuntimeException("Failed to lookup admin ID for user: " + user_id, e);
         }
-
-        // ... (rest of the code)
 
         Number tourId;
         try {

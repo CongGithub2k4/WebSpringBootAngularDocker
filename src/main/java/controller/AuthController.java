@@ -31,7 +31,6 @@ public class AuthController {
     }
 
     // http://localhost:8080/auth/login
-    // ?emailOrSDT=user1@gmail.com&password=123456
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         boolean authenticated = authService.authenticate(
@@ -56,9 +55,6 @@ public class AuthController {
         return ResponseEntity.ok(new LoginResponse(token, userDTO));
     }
 
-
-    // Dùng cho khi cần thay đổi thông tin user về sđt hay email thì cần xem xem có ai dùng chưa.
-    // Ngoài ra khi đăng ký acc ới cũng cần xét
     // http://localhost:8080/auth/check-exists?email=user1@gmail.com&phone=01234567891
     @GetMapping("/check-exists")
     public ResponseEntity<Boolean> checkEmailOrPhoneExists(@RequestParam String email, @RequestParam String phone) {

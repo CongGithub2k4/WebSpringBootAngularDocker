@@ -13,7 +13,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -31,8 +30,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 		String token = getTokenFromRequest(request);
 
-		// Nếu có token thì cố gắng xác thực
-		if (token != null/* && jwtUtil.validateToken(token)*/) {
+		if (token != null) {
 			try {
 				if(jwtUtil.validateToken(token)) {
 					Claims claims = jwtUtil.extractAllClaims(token);
@@ -55,10 +53,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			} catch (JwtException | IllegalArgumentException e) {
 				//response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token");
 				//return;
-				/***
-				*Nếu token sai thì vẫn cho đi, để controller quyết định xử lý
-				*Hoặc bạn có thể log nếu muốn
-				 * */
 			}
 		}
 		// Nếu không có token, vẫn cho qua
