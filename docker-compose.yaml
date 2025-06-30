@@ -1,43 +1,32 @@
 # travelchill/docker-compose.yml
 
 services:
-  # Dịch vụ cho ứng dụng Angular (Frontend)
   angular-app:
     build:
-      context: ./angularproject # Context là thư mục chứa Dockerfile của Angular
-      dockerfile: Dockerfile    # Dockerfile nằm trong angularproject/Dockerfile
-      # .dockerignore cho Angular cũng nằm trong ./angularproject/.dockerignore
+      context: ./angularproject
+      dockerfile: Dockerfile
     ports:
-      - "80:80" # Ánh xạ cổng 80 của container ra cổng 80 của máy host
+      - "80:80"
     depends_on:
-      - spring-boot-app # Đảm bảo Spring Boot (backend) khởi động trước Angular
+      - spring-boot-app
 
-  # Dịch vụ cho ứng dụng Spring Boot (Backend)
   spring-boot-app:
     build:
-      context: . # <--- QUAN TRỌNG: Context là thư mục gốc của dự án (travelchill/)
-      dockerfile: Dockerfile-springboot # <--- Tên Dockerfile cụ thể cho Spring Boot
-      # .dockerignore cho Spring Boot sẽ là travelchill/.dockerignore
+      context: .
+      dockerfile: Dockerfile-springboot
     ports:
-      - "8080:8080" # Ánh xạ cổng 8080 của container ra cổng 8080 của máy host
+      - "8080:8080"
     depends_on:
       oracle-db:
-        condition: service_healthy # Đợi Oracle DB khởi động và sẵn sàng
+        condition: service_healthy
     environment:
-      # Cấu hình kết nối cơ sở dữ liệu cho JDBC với PDB2
       ORACLE_DB_URL: jdbc:oracle:thin:@oracle-db:1521/PDB2
       ORACLE_DB_USERNAME: PDB2_ADMIN
       ORACLE_DB_PASSWORD: Cong23122k4
       ORACLE_DB_DRIVER: oracle.jdbc.OracleDriver
-      # Có thể thêm các biến môi trường khác nếu cần
     volumes:
-      # Mount thư mục 'uploads/' từ thư mục gốc của dự án trên host (./uploads)
-      # vào thư mục '/app/uploads/' bên trong container Spring Boot.
-      # Điều này đảm bảo Spring Boot có thể đọc/ghi vào thư mục uploads persistent.
       - ./uploads:/app/uploads
     #restart: unless-stopped
-
-  # Dịch vụ cho Oracle Database
   oracle-db:
     image: gvenzl/oracle-xe:21-slim
     container_name: oracle-xe-21c
@@ -45,27 +34,20 @@ services:
       - "1521:1521"
       - "5500:5500"
     environment:
-      # Mật khẩu cho user SYS, SYSTEM
       ORACLE_PASSWORD: Cong23122k4
-      # Tạo PDB2 tự động
       ORACLE_DATABASE: PDB2
     volumes:
-      # Volume để lưu trữ dữ liệu DB persistent
       - oracle_data:/opt/oracle/oradata
-      # Mount scripts khởi tạo để tạo user PDB2_ADMIN và tables
       - ./db-init:/container-entrypoint-initdb.d
     healthcheck:
       test: ["CMD-SHELL", "healthcheck.sh"]
       interval: 30s
       timeout: 10s
       retries: 10
-      start_period: 3m # Đợi 3 phút trước khi bắt đầu kiểm tra (để PDB2 được tạo xong)
+      start_period: 3m
     restart: unless-stopped
-    # Tăng memory limit cho Oracle
     mem_limit: 2g
-    # Shared memory size
     shm_size: 1g
 
-# Định nghĩa các Named Volumes được sử dụng bởi các services
 volumes:
   oracle_data:
