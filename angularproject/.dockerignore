@@ -1,46 +1,21 @@
-# Các tệp và thư mục bị bỏ qua bởi Docker trong quá trình build context.
-# Việc này giúp giảm kích thước build context, tăng tốc độ build
-# và tạo ra các image nhỏ gọn hơn.
-# -------------------------------------------------------------
-# Thư mục và tệp liên quan đến Node.js và quản lý gói
-# -------------------------------------------------------------
-# Không copy thư mục node_modules cục bộ, chúng sẽ được cài đặt lại trong container. node_modules/
-
-# Nhật ký gỡ lỗi của npm
 npm-debug.log
 yarn-error.log
-
 # Cache của npm
 .npm/
 .yarn/cache/
-
-# -------------------------------------------------------------
-# Thư mục và tệp đầu ra của quá trình build Angular
-# -------------------------------------------------------------
 # Thư mục chứa output của lệnh ng build (sẽ được tạo lại trong container).
 dist/
 # Thư mục tạm thời của Angular CLI (tạo trong quá trình phát triển).
 .angular/
-# -------------------------------------------------------------
-
 # Thư mục và tệp liên quan đến Hệ thống kiểm soát phiên bản (Git)
-# -------------------------------------------------------------
 .git/
 .gitignore
 .gitattributes
-# -------------------------------------------------------------
-
 # Thư mục và tệp cấu hình IDE
-# -------------------------------------------------------------
-# Cấu hình IntelliJ IDEA/WebStorm
 .idea/
-
 # Cấu hình Visual Studio Code
 .vscode/
-
-# -------------------------------------------------------------
 # Các tệp tạm thời hoặc không cần thiết khác
-# -------------------------------------------------------------
 tmp/
 *.log
 *.tmp

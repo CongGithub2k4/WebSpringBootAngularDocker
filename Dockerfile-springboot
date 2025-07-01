@@ -1,27 +1,22 @@
 # travelchill/Dockerfile-springboot
-# ================== GIAI ĐOẠN BUILD ==================
+
 FROM eclipse-temurin:24-jdk AS maven-builder
 
-# Cài thêm curl, git,... để dùng chung
 RUN apt-get update \
   && apt-get install -y ca-certificates curl git openssh-client --no-install-recommends \
   && rm -rf /var/lib/apt/lists/*
 
-# Copy Maven từ image Maven chính thức (với JDK 17)
 ENV MAVEN_HOME=/usr/share/maven
 COPY --from=maven:3.9.10-eclipse-temurin-17 ${MAVEN_HOME} ${MAVEN_HOME}
 COPY --from=maven:3.9.10-eclipse-temurin-17 /usr/local/bin/mvn-entrypoint.sh /usr/local/bin/mvn-entrypoint.sh
 COPY --from=maven:3.9.10-eclipse-temurin-17 /usr/share/maven/ref/settings-docker.xml /usr/share/maven/ref/settings-docker.xml
 
-# Link mvn vào PATH
 RUN ln -s ${MAVEN_HOME}/bin/mvn /usr/bin/mvn
 
-# Maven env
 ARG MAVEN_VERSION=3.9.10
 ARG USER_HOME_DIR="/root"
 ENV MAVEN_CONFIG="$USER_HOME_DIR/.m2"
 
-# Build ứng dụng Spring Boot
 WORKDIR /app
 COPY pom.xml ./
 COPY src ./src/
