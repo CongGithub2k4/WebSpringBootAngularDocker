@@ -1,5 +1,8 @@
 ﻿# travelchill
-Yêu cầu mát tính có Docker Desktop để phục vụ chạy dự án.
+
+Có thể xem DEMO chạy dự án qua file PDF
+
+Yêu cầu máy tính có Docker Desktop để phục vụ chạy dự án.
 Trên Terminal , chuyển đến thư mục dự án này.
 Gõ docker-compose up và chờ đợi.
 Sau khi chạy hoàn tất: truy cập localhost:80 (Nginx) trên trình duyệt.
