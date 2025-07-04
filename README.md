@@ -1,6 +1,6 @@
 ﻿# travelchill
 
-Có thể xem DEMO chạy dự án qua file PDF
+Có thể xem DEMO chạy dự án qua file PDF tên là "Chạy thử dự án"
 
 Yêu cầu máy tính có Docker Desktop để phục vụ chạy dự án.
 Trên Terminal , chuyển đến thư mục dự án này.
